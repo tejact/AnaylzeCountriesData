@@ -20,6 +20,7 @@ public class Main {
         System.out.println("Hello..Welcome to Hibernate");
 
 
+
         Country dummyCountry = new Country.CountryBuilder()
                                     .withName("India2")
                                     .withAdultLiteracyRate(90l)
@@ -48,6 +49,7 @@ public class Main {
         session.close();
 
         return countries;
+
     }
 }
 
