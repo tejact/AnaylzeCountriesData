@@ -4,16 +4,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name="Country")
 public class Country {
     @Id
-    @Column(length = 3)
+    @Column
     String code;
-    @Column(length=32)
+    @Column
     String name;
-    @Column(columnDefinition = "decimal",precision = 11,scale = 8)
+    @Column
     long internetUsers;
-    @Column(columnDefinition = "decimal",precision = 11,scale = 8)
+    @Column
     long adultLiteracyRate;
 
     //Default Constructor for JPA's
@@ -21,6 +21,7 @@ public class Country {
 
     }
 
+    //Builder Desgin pattern for creating a Country.
     public Country(CountryBuilder countryBuilder) {
           this.name = countryBuilder.name;
           this.internetUsers = countryBuilder.internetUsers;

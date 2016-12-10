@@ -20,36 +20,37 @@ public class Main {
         System.out.println("Hello..Welcome to Hibernate");
 
 
+/*
 
         Country dummyCountry = new Country.CountryBuilder()
                                     .withName("India2")
                                     .withAdultLiteracyRate(90l)
                                     .withAdultLiteracyRate(80l)
                                     .build();
+*/
 
         Main main = new Main();
-
         List allCountries = main.getAllCountries();
 
                 allCountries
                 .stream().
                 forEach(System.out::println);
 
-
     }
 
     public List<Country> getAllCountries() {
+
         Session session = sessionFactory.openSession();
-
         Criteria criteria = session.createCriteria(Country.class);
-
         List<Country> countries = criteria.list();
-
-
         session.close();
-
         return countries;
 
+       /* Session session = sessionFactory.openSession();
+        String hql = "from "+Country.class.getName();
+        Query query = session.createQuery(hql);
+        List<Country> countries = query.list();
+        return countries;*/
     }
 }
 
