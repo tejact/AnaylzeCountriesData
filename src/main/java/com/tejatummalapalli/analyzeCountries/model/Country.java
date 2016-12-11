@@ -12,9 +12,9 @@ public class Country {
     @Column
     String name;
     @Column
-    long internetUsers;
+    Double internetUsers;
     @Column
-    long adultLiteracyRate;
+    Double adultLiteracyRate;
 
     //Default Constructor for JPA's
     public Country() {
@@ -44,38 +44,48 @@ public class Country {
         this.name = name;
     }
 
-    public long getInternetUsers() {
+    public Double getInternetUsers() {
         return internetUsers;
     }
 
-    public void setInternetUsers(long internetUsers) {
+    public void setInternetUsers(Double internetUsers) {
         this.internetUsers = internetUsers;
     }
 
-    public long getAdultLiteracyRate() {
+    public Double getAdultLiteracyRate() {
         return adultLiteracyRate;
     }
 
-    public void setAdultLiteracyRate(long adultLiteracyRate) {
+    public void setAdultLiteracyRate(Double adultLiteracyRate) {
         this.adultLiteracyRate = adultLiteracyRate;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", internetUsers=" + internetUsers +
+                ", adultLiteracyRate=" + adultLiteracyRate +
+                '}';
     }
 
     public static class CountryBuilder {
         String name;
-        long internetUsers;
-        long adultLiteracyRate;
+        Double internetUsers;
+        Double adultLiteracyRate;
 
         public CountryBuilder withName(String name) {
             this.name = name;
             return this;
         }
 
-        public CountryBuilder withInternetUsers(long internetUsers) {
+        public CountryBuilder withInternetUsers(Double internetUsers) {
             this.internetUsers = internetUsers;
             return this;
         }
 
-        public CountryBuilder withAdultLiteracyRate(long adultLiteracyRate) {
+        public CountryBuilder withAdultLiteracyRate(Double adultLiteracyRate) {
             this.adultLiteracyRate = adultLiteracyRate;
             return this;
         }
