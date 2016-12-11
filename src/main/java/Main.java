@@ -12,6 +12,25 @@ public class Main {
         System.out.println("Hello..Welcome to Hibernate");
 
 
+        //addCountry();
+        //deleteCountry();
+
+
+        //displayFormattedData();
+
+        System.out.println(countryDao.getMinMaxStat("Minimum","Literacy"));
+        System.out.println(countryDao.getMinMaxStat("Maximum","Literacy"));
+        System.out.println(countryDao.getMinMaxStat("Minimum","InternetUsers"));
+        System.out.println(countryDao.getMinMaxStat("Maximum","InternetUsers"));
+
+
+    }
+
+    private static void deleteCountry() {
+        //countryDao.deleteCountry(country);
+    }
+
+    private static void addCountry() {
         Country dummyCountry = new Country.CountryBuilder()
                                     .withName("AndhraIndia2")
                                     .withCode("AND")
@@ -19,10 +38,6 @@ public class Main {
                                     .withAdultLiteracyRate(80.99)
                                     .build();
         countryDao.addCountry(dummyCountry);
-
-
-        displayFormattedData();
-
     }
 
     private static void displayFormattedData(){
