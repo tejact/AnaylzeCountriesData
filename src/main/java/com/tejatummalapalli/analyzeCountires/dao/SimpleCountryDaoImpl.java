@@ -22,8 +22,30 @@ public class SimpleCountryDaoImpl implements CountryDao {
     public List<Country> getAllCountries() {
             Session session = sessionFactory.openSession();
             Criteria criteria = session.createCriteria(Country.class);
-            List<Country> countries = criteria.list();
-            session.close();
-            return countries;
+        List<Country> countries = criteria.list();
+        session.close();
+        return countries;
+
+    }
+
+    @Override
+    public boolean addCountry(Country country) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(country);
+        session.getTransaction().commit();
+        session.close();
+        return true;
+    }
+
+
+    @Override
+    public boolean deleteCountry(Country country) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(country);
+        session.getTransaction().commit();
+        session.close();
+        return true;
     }
 }

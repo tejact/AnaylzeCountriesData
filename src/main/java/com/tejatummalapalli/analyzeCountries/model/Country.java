@@ -1,14 +1,12 @@
 package com.tejatummalapalli.analyzeCountries.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name="Country")
 public class Country {
     @Id
-    @Column
     String code;
+
     @Column
     String name;
     @Column
@@ -24,6 +22,7 @@ public class Country {
     //Builder Desgin pattern for creating a Country.
     public Country(CountryBuilder countryBuilder) {
           this.name = countryBuilder.name;
+          this.code = countryBuilder.code;
           this.internetUsers = countryBuilder.internetUsers;
           this.adultLiteracyRate = countryBuilder.adultLiteracyRate;
     }
@@ -74,9 +73,15 @@ public class Country {
         String name;
         Double internetUsers;
         Double adultLiteracyRate;
+        String code;
 
         public CountryBuilder withName(String name) {
             this.name = name;
+            return this;
+        }
+
+        public CountryBuilder withCode(String countryCode) {
+            this.code = countryCode;
             return this;
         }
 

@@ -10,14 +10,16 @@ public class Main {
 
     public static void main(String args[]) {
         System.out.println("Hello..Welcome to Hibernate");
-/*
+
 
         Country dummyCountry = new Country.CountryBuilder()
-                                    .withName("India2")
-                                    .withAdultLiteracyRate(90l)
-                                    .withAdultLiteracyRate(80l)
+                                    .withName("AndhraIndia2")
+                                    .withCode("AND")
+                                    .withInternetUsers(90.00)
+                                    .withAdultLiteracyRate(80.99)
                                     .build();
-*/
+        countryDao.addCountry(dummyCountry);
+
 
         displayFormattedData();
 
@@ -26,13 +28,17 @@ public class Main {
     private static void displayFormattedData(){
         List<Country> allCountries = countryDao.getAllCountries();
 
-      /*  allCountries.stream()
+      /*
+      //Display all the coutries.. toString on country is used.
+      allCountries.stream()
                 .forEach(System.out::println);*/
+
 
       //Print Headers
         System.out.println("Country                             Internet Users          Literacy");
         System.out.println("--------------------------------------------------------------------");
 
+      //Print Data
         for( Country country : allCountries) {
             Double internetUsers = country.getInternetUsers();
             Double adultLiteracyRate = country.getAdultLiteracyRate();
