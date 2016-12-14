@@ -23,6 +23,8 @@ public class Main {
         System.out.println(countryDao.getMinMaxStat("Minimum","InternetUsers"));
         System.out.println(countryDao.getMinMaxStat("Maximum","InternetUsers"));
 
+        System.out.println("The co-relation coefficient is "+countryDao.getCorrelationCoefficient());
+
 
     }
 
@@ -37,17 +39,23 @@ public class Main {
                                     .withInternetUsers(90.00)
                                     .withAdultLiteracyRate(80.99)
                                     .build();
-        countryDao.addCountry(dummyCountry);
+        try {
+            countryDao.addCountry(dummyCountry);
+        } catch( org.hibernate.exception.ConstraintViolationException e1) {
+            System.out.println("********Following Constraint violated*****");
+            e1.printStackTrace();
+        } catch ( Exception e) {
+            System.out.println("Parent Exceptin is catched");
+            e.printStackTrace();
+        }
     }
 
     private static void displayFormattedData(){
         List<Country> allCountries = countryDao.getAllCountries();
-
       /*
       //Display all the coutries.. toString on country is used.
       allCountries.stream()
                 .forEach(System.out::println);*/
-
 
       //Print Headers
         System.out.println("Country                             Internet Users          Literacy");

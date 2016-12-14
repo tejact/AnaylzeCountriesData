@@ -61,7 +61,6 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
         }
         else if( condition.equals(MAXIMUM) && column.equals(INTERNET_USERS) ) {
-
             countryWithDesiredStatistic = countries.stream()
                     .filter(c1 -> c1.getInternetUsers() != null)
                     .max(internetUsersComparator)
@@ -79,7 +78,57 @@ public class SimpleCountryDaoImpl implements CountryDao {
     }
 
     @Override
-    public boolean addCountry(Country country) {
+    public double getCorrelationCoefficient() {
+        double correlationCoefficient = 0;
+        List<Country> allCountries;
+        allCountries = getAllCountries();
+
+        double internetUsersMean = allCountries.stream()
+                                                .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
+                                                .mapToDouble(Country::getInternetUsers)
+                                                .average()
+                                                .orElseThrow(IllegalArgumentException::new);
+
+
+        double adultLiteracyMean = allCountries.stream()
+                                                .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
+                                                .mapToDouble(Country::getAdultLiteracyRate)
+                                                .average()
+                                                .orElseThrow(IllegalArgumentException::new);
+
+        double diffAdultLiteracyWithMean;
+        double diffInternetUsageWithMean;
+        double productOfTwoMeans;
+        double sumOfProductOfTwoDiffMeans = 0;
+       // double adultLiteracySquare = 0;
+        // double internetUsersSquare = 0;
+        double sumAdultLiteracySquare = 0;
+        double sumIntenetUsersSquare = 0;
+
+        for(Country country : allCountries) {
+
+
+            final Double adultLiteracyRate = country.getAdultLiteracyRate();
+            final Double internetUsers = country.getInternetUsers();
+            if(adultLiteracyRate != null && internetUsers != null) {
+                    diffAdultLiteracyWithMean = adultLiteracyRate - adultLiteracyMean;
+                    diffInternetUsageWithMean = internetUsers - internetUsersMean;
+                    productOfTwoMeans = diffAdultLiteracyWithMean * diffInternetUsageWithMean;
+
+                    sumOfProductOfTwoDiffMeans += productOfTwoMeans;
+                    sumAdultLiteracySquare += (adultLiteracyRate * 2);
+                    sumIntenetUsersSquare += (adultLiteracyRate * 2);
+
+            }
+
+        }
+
+        correlationCoefficient = (sumOfProductOfTwoDiffMeans) / Math.sqrt(sumAdultLiteracySquare*sumIntenetUsersSquare);
+        return correlationCoefficient;
+    }
+
+    @Override
+    public boolean addCountry(Country country) throws org.hibernate.exception.ConstraintViolationException{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(country);
