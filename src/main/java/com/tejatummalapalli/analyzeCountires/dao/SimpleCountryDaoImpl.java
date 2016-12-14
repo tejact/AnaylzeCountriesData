@@ -84,12 +84,9 @@ public class SimpleCountryDaoImpl implements CountryDao {
         allCountries = getAllCountries();
 
         double internetUsersMean = getInternetUsersMean(allCountries);
-
         System.out.println("The mean of internet users is "+internetUsersMean);
 
-
         double adultLiteracyMean = getAdultLiteracyMean(allCountries);
-
         System.out.println("The mean of adult Literacy rate is "+adultLiteracyMean);
 
         double diffAdultLiteracyWithMean;
@@ -97,11 +94,9 @@ public class SimpleCountryDaoImpl implements CountryDao {
         double productOfTwoMeans;
         double sumOfProductOfTwoDiffMeans = 0;
         double sumAdultLiteracySquare = 0;
-        double sumIntenetUsersSquare = 0;
+        double sumInternetUsersSquare = 0;
 
         for(Country country : allCountries) {
-
-
             final Double adultLiteracyRate = country.getAdultLiteracyRate();
             final Double internetUsers = country.getInternetUsers();
             if(adultLiteracyRate != null && internetUsers != null) {
@@ -111,13 +106,17 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
                     sumOfProductOfTwoDiffMeans += productOfTwoMeans;
                     sumAdultLiteracySquare += (adultLiteracyRate * 2);
-                    sumIntenetUsersSquare += (adultLiteracyRate * 2);
+                    sumInternetUsersSquare += (internetUsers * 2);
 
             }
 
         }
 
-        correlationCoefficient = (sumOfProductOfTwoDiffMeans) / Math.sqrt(sumAdultLiteracySquare*sumIntenetUsersSquare);
+        System.out.println("sumOfProductOfTwoDiffMeans "+sumOfProductOfTwoDiffMeans);
+        System.out.println("sumAdultLiteracySquare "+sumAdultLiteracySquare);
+        System.out.println("sumInternetUsersSquare "+sumInternetUsersSquare);
+
+        correlationCoefficient = (sumOfProductOfTwoDiffMeans) / Math.sqrt(sumAdultLiteracySquare*sumInternetUsersSquare);
         return correlationCoefficient;
     }
 
