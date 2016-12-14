@@ -83,25 +83,19 @@ public class SimpleCountryDaoImpl implements CountryDao {
         List<Country> allCountries;
         allCountries = getAllCountries();
 
-        double internetUsersMean = allCountries.stream()
-                                                .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
-                                                .mapToDouble(Country::getInternetUsers)
-                                                .average()
-                                                .orElseThrow(IllegalArgumentException::new);
+        double internetUsersMean = getInternetUsersMean(allCountries);
+
+        System.out.println("The mean of internet users is "+internetUsersMean);
 
 
-        double adultLiteracyMean = allCountries.stream()
-                                                .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
-                                                .mapToDouble(Country::getAdultLiteracyRate)
-                                                .average()
-                                                .orElseThrow(IllegalArgumentException::new);
+        double adultLiteracyMean = getAdultLiteracyMean(allCountries);
+
+        System.out.println("The mean of adult Literacy rate is "+adultLiteracyMean);
 
         double diffAdultLiteracyWithMean;
         double diffInternetUsageWithMean;
         double productOfTwoMeans;
         double sumOfProductOfTwoDiffMeans = 0;
-       // double adultLiteracySquare = 0;
-        // double internetUsersSquare = 0;
         double sumAdultLiteracySquare = 0;
         double sumIntenetUsersSquare = 0;
 
@@ -125,6 +119,22 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
         correlationCoefficient = (sumOfProductOfTwoDiffMeans) / Math.sqrt(sumAdultLiteracySquare*sumIntenetUsersSquare);
         return correlationCoefficient;
+    }
+
+     public double getAdultLiteracyMean(List<Country> allCountries) {
+        return allCountries.stream()
+                                                    .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
+                                                    .mapToDouble(Country::getAdultLiteracyRate)
+                                                    .average()
+                                                    .orElseThrow(IllegalArgumentException::new);
+    }
+
+     public double getInternetUsersMean(List<Country> allCountries) {
+        return allCountries.stream()
+                                                    .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
+                                                    .mapToDouble(Country::getInternetUsers)
+                                                    .average()
+                                                    .orElseThrow(IllegalArgumentException::new);
     }
 
     @Override
