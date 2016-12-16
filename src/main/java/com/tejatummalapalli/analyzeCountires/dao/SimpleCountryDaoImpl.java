@@ -8,6 +8,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.Comparator;
 import java.util.List;
 
@@ -75,6 +77,20 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
         session.close();
         return countryWithDesiredStatistic;
+    }
+
+    @Override
+    public Country getCountry(String countryName) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        CriteriaQuery criteriaQuery = session.getCriteriaBuilder().createQuery(Country.class);
+        /*criteriaQuery.where()
+*/
+
+        session.getTransaction().commit();
+        session.close();
+        return null;
     }
 
     @Override
@@ -148,10 +164,20 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
 
     @Override
-    public boolean deleteCountry(Country country) {
+    public boolean deleteCountry(String countryName) {
         Session session = sessionFactory.openSession();
+
         session.beginTransaction();
-        session.delete(country);
+
+        Query query = session.createQuery("delete  From Country  where name = :name");
+        query.setParameter("name",countryName );
+
+        int result = query.executeUpdate();
+
+        if (result > 0) {
+            System.out.println("Country is deleted");
+        }
+
         session.getTransaction().commit();
         session.close();
         return true;

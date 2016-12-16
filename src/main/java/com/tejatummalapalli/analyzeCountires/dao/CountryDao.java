@@ -7,8 +7,9 @@ import java.util.List;
 public interface CountryDao {
      List<Country> getAllCountries();
      boolean addCountry(Country country) throws  org.hibernate.exception.ConstraintViolationException;
-     boolean deleteCountry(Country country);
+     boolean deleteCountry(String countryName);
      Country getMinMaxStat(String condition , String column);
+     Country getCountry(String countryName);
      double getCorrelationCoefficient();
      double getAdultLiteracyMean(List<Country> allCountries);
      double getInternetUsersMean(List<Country> allCountries) ;
