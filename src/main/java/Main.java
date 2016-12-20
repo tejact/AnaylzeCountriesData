@@ -94,10 +94,7 @@ public class Main {
 
     private static void displayFormattedData(){
         List<Country> allCountries = countryDao.getAllCountries();
-      /*
-      //Display all the coutries.. toString on country is used.
-      allCountries.stream()
-                .forEach(System.out::println);*/
+
 
       //Print Headers
         System.out.println("Country                             Internet Users          Literacy");
@@ -108,10 +105,10 @@ public class Main {
             Double internetUsers = country.getInternetUsers();
             Double adultLiteracyRate = country.getAdultLiteracyRate();
 
-            String formatedInternetUsers = formatDouble(internetUsers);
-            String formatedAdultLiteracyRate = formatDouble(adultLiteracyRate);
+            String formattedInternetUsers = formatDouble(internetUsers);
+            String formattedAdultLiteracyRate = formatDouble(adultLiteracyRate);
 
-            System.out.println(country.getName()+"****"+formatedInternetUsers+"***"+formatedAdultLiteracyRate);
+            System.out.println(country.getName()+"****"+formattedInternetUsers+"***"+formattedAdultLiteracyRate);
       }
     }
 

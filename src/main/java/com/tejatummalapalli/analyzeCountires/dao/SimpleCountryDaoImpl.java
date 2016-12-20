@@ -17,10 +17,10 @@ import java.util.List;
 public class SimpleCountryDaoImpl implements CountryDao {
 
     //TODO:Make these constants available in ENUM. Every other class can access them
-    public static final String MAXIMUM = "Maximum";
-    public static final String LITERACY = "Literacy";
-    public static final String MINIMUM = "Minimum";
-    public static final String INTERNET_USERS = "InternetUsers";
+    private static final String MAXIMUM = "Maximum";
+    private static final String LITERACY = "Literacy";
+    private static final String MINIMUM = "Minimum";
+    private static final String INTERNET_USERS = "InternetUsers";
     private final SessionFactory sessionFactory = buildSessionFactory();
 
     private SessionFactory buildSessionFactory() {
@@ -53,26 +53,26 @@ public class SimpleCountryDaoImpl implements CountryDao {
             countryWithDesiredStatistic =  countries.stream()
                                                     .filter(c1 -> c1.getAdultLiteracyRate() != null)
                                                     .max(literacyComparator)
-                                                    .get();
+                                                    .orElse(null);
 
 
         } else if( condition.equals(MINIMUM) && column.equals(LITERACY)) {
             countryWithDesiredStatistic = countries.stream()
                                                     .filter(c1 -> c1.getAdultLiteracyRate() != null)
                                                     .min(literacyComparator)
-                                                    .get();
+                                                    .orElse(null);
 
         }
         else if( condition.equals(MAXIMUM) && column.equals(INTERNET_USERS) ) {
             countryWithDesiredStatistic = countries.stream()
                     .filter(c1 -> c1.getInternetUsers() != null)
                     .max(internetUsersComparator)
-                    .get();
+                    .orElse(null);
         } else if( condition.equals(MINIMUM) && column.equals(INTERNET_USERS) ) {
             countryWithDesiredStatistic = countries.stream()
                     .filter(c1 -> c1.getInternetUsers() != null)
                     .min(internetUsersComparator)
-                    .get();
+                    .orElse(null);
         }
 
 
@@ -93,11 +93,8 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
     @Override
     public double getCorrelationCoefficient() {
-        double correlationCoefficient = 0;
         List<Country> allCountries;
         allCountries = getAllCountries();
-
-        //******************
 
         double[] adultLiteracyRate = allCountries.stream()
                 .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
@@ -121,24 +118,6 @@ public class SimpleCountryDaoImpl implements CountryDao {
         return correlation;
     }
 
-
-
-
-     public double getAdultLiteracyMean(List<Country> allCountries) {
-        return allCountries.stream()
-                                                    .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
-                                                    .mapToDouble(Country::getAdultLiteracyRate)
-                                                    .average()
-                                                    .orElseThrow(IllegalArgumentException::new);
-    }
-
-     public double getInternetUsersMean(List<Country> allCountries) {
-        return allCountries.stream()
-                                                    .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
-                                                    .mapToDouble(Country::getInternetUsers)
-                                                    .average()
-                                                    .orElseThrow(IllegalArgumentException::new);
-    }
 
     @Override
     public void updateCountry(String countryID, String toBeUpdatedColumn, String newValue) {

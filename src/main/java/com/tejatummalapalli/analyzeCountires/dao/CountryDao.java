@@ -11,7 +11,5 @@ public interface CountryDao {
      Country getMinMaxStat(String condition , String column);
      Country getCountry(String countryName);
      double getCorrelationCoefficient();
-     double getAdultLiteracyMean(List<Country> allCountries);
-     double getInternetUsersMean(List<Country> allCountries) ;
      void updateCountry(String countryID,String toBeUpdatedColumn,String newValue);
 }
