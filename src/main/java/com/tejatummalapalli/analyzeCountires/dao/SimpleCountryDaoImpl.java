@@ -1,6 +1,8 @@
 package com.tejatummalapalli.analyzeCountires.dao;
 
 import com.tejatummalapalli.analyzeCountries.model.Country;
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,7 +11,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.Comparator;
 import java.util.List;
 
@@ -98,45 +99,30 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
         //******************
 
+        double[] adultLiteracyRate = allCountries.stream()
+                .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
+                .mapToDouble(Country::getAdultLiteracyRate)
+                .toArray();
 
-        //*******************
+        double[] internetUsers = allCountries.stream()
+                .filter(country -> (country.getAdultLiteracyRate() != null  && country.getInternetUsers() != null))
+                .mapToDouble(Country::getInternetUsers)
+                .toArray();
 
-        double internetUsersMean = getInternetUsersMean(allCountries);
-        System.out.println("The mean of internet users is "+internetUsersMean);
-
-        double adultLiteracyMean = getAdultLiteracyMean(allCountries);
-        System.out.println("The mean of adult Literacy rate is "+adultLiteracyMean);
-
-        double diffAdultLiteracyWithMean;
-        double diffInternetUsageWithMean;
-        double productOfTwoMeans;
-        double sumOfProductOfTwoDiffMeans = 0;
-        double sumAdultLiteracySquare = 0;
-        double sumInternetUsersSquare = 0;
-
-        for(Country country : allCountries) {
-            final Double adultLiteracyRate = country.getAdultLiteracyRate();
-            final Double internetUsers = country.getInternetUsers();
-            if(adultLiteracyRate != null && internetUsers != null) {
-                    diffAdultLiteracyWithMean = adultLiteracyRate - adultLiteracyMean;
-                    diffInternetUsageWithMean = internetUsers - internetUsersMean;
-                    productOfTwoMeans = diffAdultLiteracyWithMean * diffInternetUsageWithMean;
-
-                    sumOfProductOfTwoDiffMeans += productOfTwoMeans;
-                    sumAdultLiteracySquare += (adultLiteracyRate * 2);
-                    sumInternetUsersSquare += (internetUsers * 2);
-
-            }
-
+        Double correlation = 0.0;
+        try {
+            correlation = new PearsonsCorrelation()
+                    .correlation(adultLiteracyRate,internetUsers);
+        } catch (MathIllegalArgumentException iae) {
+            iae.printStackTrace();
+            System.out.println("Adult literacy rate and internet user arrays" +
+                    "are too small for the correlation to be calculated");
         }
-
-        System.out.println("sumOfProductOfTwoDiffMeans "+sumOfProductOfTwoDiffMeans);
-        System.out.println("sumAdultLiteracySquare "+sumAdultLiteracySquare);
-        System.out.println("sumInternetUsersSquare "+sumInternetUsersSquare);
-
-        correlationCoefficient = (sumOfProductOfTwoDiffMeans) / Math.sqrt(sumAdultLiteracySquare*sumInternetUsersSquare);
-        return correlationCoefficient;
+        return correlation;
     }
+
+
+
 
      public double getAdultLiteracyMean(List<Country> allCountries) {
         return allCountries.stream()
