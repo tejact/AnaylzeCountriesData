@@ -46,6 +46,14 @@ public class Main {
                 deleteCountry(countryName);
             }else if(userOption.equals("4"))
             {
+                String countryID = prompter.getDataFromUser("Please enter the ID of the country you want ot update");
+
+                String toBeUpdatedColum = prompter.getDataFromUser("What do you want to change? 1.Literacy Rate 2.Internet Users");
+
+                String newValue = prompter.getDataFromUser("Please enter the new value");
+
+                countryDao.updateCountry(countryID,toBeUpdatedColum,newValue);
+
             }else if(userOption.equals("5"))
             {
                 System.out.println("The co-relation coefficient is " + countryDao.getCorrelationCoefficient());

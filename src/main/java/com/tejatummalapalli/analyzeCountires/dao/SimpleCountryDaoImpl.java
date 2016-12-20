@@ -80,17 +80,14 @@ public class SimpleCountryDaoImpl implements CountryDao {
     }
 
     @Override
-    public Country getCountry(String countryName) {
+    public Country getCountry(String countryCode) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        CriteriaQuery criteriaQuery = session.getCriteriaBuilder().createQuery(Country.class);
-        /*criteriaQuery.where()
-*/
+        Country country = session.get(Country.class, countryCode);
 
-        session.getTransaction().commit();
         session.close();
-        return null;
+        return country;
     }
 
     @Override
@@ -98,6 +95,11 @@ public class SimpleCountryDaoImpl implements CountryDao {
         double correlationCoefficient = 0;
         List<Country> allCountries;
         allCountries = getAllCountries();
+
+        //******************
+
+
+        //*******************
 
         double internetUsersMean = getInternetUsersMean(allCountries);
         System.out.println("The mean of internet users is "+internetUsersMean);
@@ -150,6 +152,25 @@ public class SimpleCountryDaoImpl implements CountryDao {
                                                     .mapToDouble(Country::getInternetUsers)
                                                     .average()
                                                     .orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Override
+    public void updateCountry(String countryID, String toBeUpdatedColumn, String newValue) {
+        Session session = sessionFactory.openSession();
+
+        session.beginTransaction();
+
+        Country country = getCountry(countryID);
+
+        if(toBeUpdatedColumn.equals("1")){
+            country.setInternetUsers(Double.parseDouble(newValue));
+        }else if(toBeUpdatedColumn.equals("2")) {
+            country.setInternetUsers(Double.parseDouble(newValue));
+        }
+
+        session.update(country);
+        session.getTransaction().commit();
+        session.close();
     }
 
     @Override

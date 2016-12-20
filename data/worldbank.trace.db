@@ -733,3 +733,6 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:C:/Users/Tej
 	at org.h2.mvstore.FileStore.open(FileStore.java:173)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:348)
 	... 47 more
+2016-12-20 07:35:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Value too long for column "CODE NVARCHAR(3) NOT NULL": "'AND5' (4)"; SQL statement:
+insert into Country (adultLiteracyRate, internetUsers, name, code) values (?, ?, ?, ?) [22001-193]

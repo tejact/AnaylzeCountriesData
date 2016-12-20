@@ -13,4 +13,5 @@ public interface CountryDao {
      double getCorrelationCoefficient();
      double getAdultLiteracyMean(List<Country> allCountries);
      double getInternetUsersMean(List<Country> allCountries) ;
+     void updateCountry(String countryID,String toBeUpdatedColumn,String newValue);
 }
