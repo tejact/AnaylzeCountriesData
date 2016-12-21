@@ -1,4 +1,4 @@
-package com.tejatummalapalli.analyzeCountires.dao;
+package com.tejatummalapalli.analyzeCountries.dao;
 
 import com.tejatummalapalli.analyzeCountries.model.Country;
 import org.junit.Before;

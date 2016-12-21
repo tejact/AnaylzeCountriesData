@@ -1,5 +1,6 @@
-package com.tejatummalapalli.analyzeCountires.dao;
+package com.tejatummalapalli.analyzeCountries.dao;
 
+import com.tejatummalapalli.analyzeCountries.exceptions.CountryNotFoundException;
 import com.tejatummalapalli.analyzeCountries.model.Country;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
@@ -30,12 +31,11 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
     @Override
     public List<Country> getAllCountries() {
-            Session session = sessionFactory.openSession();
-            Criteria criteria = session.createCriteria(Country.class);
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Country.class);
         List<Country> countries = criteria.list();
         session.close();
         return countries;
-
     }
 
 
@@ -81,11 +81,15 @@ public class SimpleCountryDaoImpl implements CountryDao {
     }
 
     @Override
-    public Country getCountry(String countryCode) {
+    public Country getCountry(String countryCode) throws CountryNotFoundException {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         Country country = session.get(Country.class, countryCode);
+
+        if(country == null) {
+            throw new CountryNotFoundException();
+        }
 
         session.close();
         return country;
@@ -120,7 +124,7 @@ public class SimpleCountryDaoImpl implements CountryDao {
 
 
     @Override
-    public void updateCountry(String countryID, String toBeUpdatedColumn, String newValue) {
+    public void updateCountry(String countryID, String toBeUpdatedColumn, String newValue) throws CountryNotFoundException {
         Session session = sessionFactory.openSession();
 
         session.beginTransaction();

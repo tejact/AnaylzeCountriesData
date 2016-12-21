@@ -1,5 +1,6 @@
-import com.tejatummalapalli.analyzeCountires.dao.CountryDao;
-import com.tejatummalapalli.analyzeCountires.dao.SimpleCountryDaoImpl;
+import com.tejatummalapalli.analyzeCountries.dao.CountryDao;
+import com.tejatummalapalli.analyzeCountries.dao.SimpleCountryDaoImpl;
+import com.tejatummalapalli.analyzeCountries.exceptions.CountryNotFoundException;
 import com.tejatummalapalli.analyzeCountries.model.Country;
 
 import java.util.List;
@@ -24,8 +25,7 @@ public class Main {
 
             if (userOption.equals("1")) {
                 displayFormattedData();
-            } else if(userOption.equals("2"))
-            {
+            } else if(userOption.equals("2")) {
                 String nameOfCountry = prompter.getDataFromUser("Please provide the name of the country");
                 String countryCode = prompter.getDataFromUser("Please provide the unique code for the country");
                 double adultLiteractyRate  = Double.parseDouble(prompter.getDataFromUser("Please provide the adult literacy rate for this country"));
@@ -37,34 +37,32 @@ public class Main {
                         .withInternetUsers(internetUsers)
                         .withAdultLiteracyRate(adultLiteractyRate)
                         .build();
-
                 addCountry(newCountry);
-
-            }else if(userOption.equals("3"))
-            {
-                String countryName = prompter.getDataFromUser("Please enter the country name to be deleted");
-                deleteCountry(countryName);
-            }else if(userOption.equals("4"))
-            {
-                String countryID = prompter.getDataFromUser("Please enter the ID of the country you want ot update");
-
+            }else if(userOption.equals("3")) {
+                String countryName = prompter.getDataFromUser("Please enter the country code to be deleted");
+                boolean status = countryDao.deleteCountry(countryName);
+                if(status) {
+                    System.out.println("The country entered is deleted");
+                } else{
+                    System.out.println("The country is not present!!!!");
+                }
+            }else if(userOption.equals("4")) {
+                String countryID = prompter.getDataFromUser("Please enter the code of the country you want to update");
                 String toBeUpdatedColum = prompter.getDataFromUser("What do you want to change? 1.Literacy Rate 2.Internet Users");
-
                 String newValue = prompter.getDataFromUser("Please enter the new value");
-
-                countryDao.updateCountry(countryID,toBeUpdatedColum,newValue);
-
-            }else if(userOption.equals("5"))
-            {
+                try {
+                    countryDao.updateCountry(countryID,toBeUpdatedColum,newValue);
+                } catch (CountryNotFoundException e){
+                    //e.printStackTrace();
+                    System.out.println("The country to be update does not exist in the DB. Please provide the valid country");
+                }
+            }else if(userOption.equals("5")) {
                 System.out.println("The co-relation coefficient is " + countryDao.getCorrelationCoefficient());
-            }else if(userOption.equals("6"))
-            {
+            }else if(userOption.equals("6")) {
                 System.out.println(countryDao.getMinMaxStat("Maximum", "Literacy"));
-            }else if(userOption.equals("7"))
-            {
+            }else if(userOption.equals("7")) {
                 System.out.println(countryDao.getMinMaxStat("Minimum", "Literacy"));
-            }else if(userOption.equals("8"))
-            {
+            }else if(userOption.equals("8")) {
                 System.out.println(countryDao.getMinMaxStat("Maximum", "InternetUsers"));
             }
             else if (userOption.equals("9")) {
@@ -73,11 +71,6 @@ public class Main {
                 System.out.println("Thanks you!!!");
             }
         }while(!userOption.equals("10"));
-    }
-    private static void deleteCountry(String countryName) {
-
-        countryDao.deleteCountry(countryName);
-
     }
 
     private static void addCountry(Country newCountry) {
